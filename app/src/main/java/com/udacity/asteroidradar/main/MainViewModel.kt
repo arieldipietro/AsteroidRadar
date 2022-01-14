@@ -31,6 +31,10 @@ class MainViewModel : ViewModel() {
     val error: LiveData<String>
         get() = _error
 
+    private val _navigateToDetailFragment = MutableLiveData<Long>()
+    val navigateToDetailFragment : LiveData<Long>
+        get() = _navigateToDetailFragment
+
     init {
         getAsteroids()
         getPictureOfTheDay()
@@ -66,6 +70,14 @@ class MainViewModel : ViewModel() {
                 _pictureOfDay.value = null
             }
         })
+    }
+
+    fun onAsteroidClicked(id: Long){
+        _navigateToDetailFragment.value = id
+    }
+
+    fun onDetailsFragmentNavigated(){
+        _navigateToDetailFragment.value = null
     }
 
     }

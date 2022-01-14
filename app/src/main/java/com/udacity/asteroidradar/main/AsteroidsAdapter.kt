@@ -2,48 +2,58 @@ package com.udacity.asteroidradar.main
 
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.udacity.asteroidradar.Asteroid
-import com.udacity.asteroidradar.R
+import com.udacity.asteroidradar.databinding.AsteriodListItemBinding
 
-class AsteroidsAdapter: RecyclerView.Adapter<AsteroidsViewHolder>() {
-    var data = listOf<Asteroid>()
-    set(value){
-        field = value
-        notifyDataSetChanged()
-    }
+class AsteroidsAdapter(val clickListener: AsteroidsListener):
+    androidx.recyclerview.widget.ListAdapter<Asteroid, AsteroidsViewHolder>
+    (AsteriodsDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AsteroidsViewHolder {
-        val layoutInflater = LayoutInflater.from(parent.context)
-        val view = layoutInflater.inflate(R.layout.asteriod_list_item, parent, false)
-        return AsteroidsViewHolder(view)
+        return AsteroidsViewHolder.asteroidsViewHolder(parent)
     }
 
     override fun onBindViewHolder(holder: AsteroidsViewHolder, position: Int) {
-        val item = data[position]
-
-        holder.codenameTextView.text = item.codename
-        holder.dateTextView.text = item.closeApproachDate
-
-        if(item.isPotentiallyHazardous) {
-            holder.hazardImageView.setImageResource(R.drawable.ic_status_potentially_hazardous)
-        } else {
-            holder.hazardImageView.setImageResource(R.drawable.ic_status_normal)
-        }
+        val item = getItem(position)
+        holder.bind(getItem(position)!!, clickListener)
     }
-
-    override fun getItemCount(): Int = data.size
 
 }
 
-class AsteroidsViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
+class AsteroidsViewHolder private constructor(val binding: AsteriodListItemBinding)
+    : RecyclerView.ViewHolder(binding.root){
 
-    val codenameTextView : TextView = itemView.findViewById(R.id.codename_text)
-    val dateTextView : TextView = itemView.findViewById(R.id.date_text)
-    val hazardImageView : ImageView = itemView.findViewById(R.id.hazard_image)
 
+    fun bind(item: Asteroid, clickListener: AsteroidsListener) {
+        binding.asteroid = item
+        binding.executePendingBindings()
+        binding.clickListener = clickListener
+    }
+
+    companion object {
+        fun asteroidsViewHolder(parent: ViewGroup): AsteroidsViewHolder {
+            val layoutInflater = LayoutInflater.from(parent.context)
+            val binding = AsteriodListItemBinding.inflate(layoutInflater, parent, false)
+            return AsteroidsViewHolder(binding)
+        }
+    }
+
+}
+
+class AsteriodsDiffCallback : DiffUtil.ItemCallback<Asteroid>(){
+    override fun areItemsTheSame(oldItem: Asteroid, newItem: Asteroid): Boolean {
+        return oldItem.id ==newItem.id
+    }
+
+    override fun areContentsTheSame(oldItem: Asteroid, newItem: Asteroid): Boolean {
+        return oldItem == newItem
+    }
+
+}
+
+class AsteroidsListener (val clickListener: (asteroidId: Long) -> Unit){
+    fun onClick(asteroid: Asteroid) = clickListener(asteroid.id)
 }

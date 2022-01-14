@@ -6,6 +6,7 @@ import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 
+//Adapters for the main Fragment
 @BindingAdapter("statusIcon")
 fun bindAsteroidStatusImage(imageView: ImageView, isHazardous: Boolean) {
     if (isHazardous) {
@@ -15,6 +16,31 @@ fun bindAsteroidStatusImage(imageView: ImageView, isHazardous: Boolean) {
     }
 }
 
+@BindingAdapter("codename")
+fun bindAsteroidsCodename(textView: TextView, codename: String){
+    val context = textView.context
+    textView.text = codename
+}
+
+@BindingAdapter("closeApproachDate")
+fun bindAsteroidsDate(textView: TextView, closeApproachDate: String){
+    val context = textView.context
+    textView.text = closeApproachDate
+}
+
+
+@BindingAdapter("pictureOfDayUrl")
+fun bindImageOfDay(imgView : ImageView, imgUrl: String?){
+    imgUrl?.let{
+        val imgUri = it.toUri().buildUpon().scheme("https").build()
+        Glide.with(imgView.context)
+            .load(imgUri)
+            .into(imgView)
+    }
+}
+
+
+//Adapters for the Detail Fragment
 @BindingAdapter("asteroidStatusImage")
 fun bindDetailsStatusImage(imageView: ImageView, isHazardous: Boolean) {
     if (isHazardous) {
@@ -42,12 +68,3 @@ fun bindTextViewToDisplayVelocity(textView: TextView, number: Double) {
     textView.text = String.format(context.getString(R.string.km_s_unit_format), number)
 }
 
-@BindingAdapter("imageUrl")
-fun bindImageOfDay(imgView : ImageView, imgUrl: String?){
-    imgUrl?.let{
-        val imgUri = it.toUri().buildUpon().scheme("https").build()
-        Glide.with(imgView.context)
-            .load(imgUri)
-            .into(imgView)
-    }
-}
