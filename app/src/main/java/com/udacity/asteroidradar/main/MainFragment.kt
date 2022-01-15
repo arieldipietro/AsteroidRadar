@@ -26,16 +26,12 @@ class MainFragment : Fragment() {
 
         binding.viewModel = viewModel
 
-        viewModel.status.observe(viewLifecycleOwner){
-                asteroidList ->
-            asteroidList.forEach {asteroid ->
-                Log.d("MainFragment", "Asteroid: ${asteroid.codename}")
-            }
-        }
 
         val adapter = AsteroidsAdapter(AsteroidsListener {
-                asteroidId -> viewModel.onAsteroidClicked(asteroid)
+                asteroidId -> viewModel.onAsteroidClicked(asteroidId)
         })
+
+        binding.asteroidRecycler.adapter = adapter
 
         viewModel.navigateToDetailFragment.observe(viewLifecycleOwner, Observer{
                 asteroid -> asteroid?.let{
@@ -44,8 +40,6 @@ class MainFragment : Fragment() {
             viewModel.onDetailsFragmentNavigated()
         }
         })
-
-        binding.asteroidRecycler.adapter = adapter
 
         viewModel.status.observe(viewLifecycleOwner, Observer{
             it ?.let{
