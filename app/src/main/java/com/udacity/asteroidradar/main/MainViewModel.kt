@@ -1,22 +1,15 @@
 package com.udacity.asteroidradar.main
 
-import android.app.Activity
 import android.app.Application
-import android.content.Context
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.*
 import com.udacity.asteroidradar.Asteroid
-import com.udacity.asteroidradar.MainActivity
 import com.udacity.asteroidradar.PictureOfDay
-import com.udacity.asteroidradar.api.parseAsteroidsJsonResult
-import com.udacity.asteroidradar.database.AsteroidsDatabase
 import com.udacity.asteroidradar.database.DatabaseAsteroids
 import com.udacity.asteroidradar.database.getDatabase
 import com.udacity.asteroidradar.network.AsteroidApi
 import com.udacity.asteroidradar.repository.AsteroidsRepository
 import kotlinx.coroutines.launch
-import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Response
 
@@ -26,9 +19,7 @@ class MainViewModel(application : Application) : AndroidViewModel(application) {
     private val database = getDatabase(application)
     private val asteroidsRepository = AsteroidsRepository(database)
 
-    private val _status = MutableLiveData<List<DatabaseAsteroids>>()
-    val status: LiveData<List<DatabaseAsteroids>>
-        get() = _status
+    val status: LiveData<List<DatabaseAsteroids>> = database.asteroidDao.getAsteroids()
 
     private val _pictureOfDay = MutableLiveData<PictureOfDay>()
     val pictureOfDay : LiveData<PictureOfDay>
@@ -47,7 +38,6 @@ class MainViewModel(application : Application) : AndroidViewModel(application) {
             asteroidsRepository.refreshAsteroids()
         }
         getPictureOfTheDay()
-        _status.value = database.asteroidDao.getAsteroids()
     }
 
 
