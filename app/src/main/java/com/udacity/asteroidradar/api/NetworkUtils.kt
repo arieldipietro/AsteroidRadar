@@ -8,7 +8,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 fun parseAsteroidsJsonResult(jsonObject: JSONObject): List<Asteroid> {
-    val asteroidList = mutableListOf<Asteroid>()
+    val asteroidList = ArrayList<Asteroid>()
     val nearEarthObjectsJson = jsonObject.getJSONObject("near_earth_objects")
     val dateList = nearEarthObjectsJson.keys()
     val dateListSorted = dateList.asSequence().sorted()

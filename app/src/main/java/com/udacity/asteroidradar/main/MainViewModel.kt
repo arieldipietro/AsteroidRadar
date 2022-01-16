@@ -1,23 +1,29 @@
 package com.udacity.asteroidradar.main
 
 import android.app.Activity
+import android.app.Application
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.udacity.asteroidradar.Asteroid
 import com.udacity.asteroidradar.MainActivity
 import com.udacity.asteroidradar.PictureOfDay
 import com.udacity.asteroidradar.api.parseAsteroidsJsonResult
+import com.udacity.asteroidradar.database.AsteroidsDatabase
+import com.udacity.asteroidradar.database.getDatabase
 import com.udacity.asteroidradar.network.AsteroidApi
+import com.udacity.asteroidradar.repository.AsteroidsRepository
+import kotlinx.coroutines.launch
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Response
 
-class MainViewModel : ViewModel() {
+class MainViewModel(application : Application) : AndroidViewModel(application) {
+
+    //Repository
+    private val database = getDatabase(application)
+    private val asteroidsRepository = AsteroidsRepository(database)
 
     private val _status = MutableLiveData<List<Asteroid>>()
     val status: LiveData<List<Asteroid>>
@@ -36,12 +42,14 @@ class MainViewModel : ViewModel() {
         get() = _navigateToDetailFragment
 
     init {
-        getAsteroids()
+        viewModelScope.launch {
+            asteroidsRepository.refreshAsteroids()
+        }
         getPictureOfTheDay()
     }
 
 
-    private fun getAsteroids() {
+    /*private fun getAsteroids() {
         AsteroidApi.retrofitServiceAsteroids.getAsteroids().enqueue(object : retrofit2.Callback<String> {
             override fun onResponse(call: Call<String>, response: Response<String>) {
                 _status.value =
@@ -52,7 +60,7 @@ class MainViewModel : ViewModel() {
                 _error.value = t.message
             }
         })
-    }
+    }*/
 
     private fun getPictureOfTheDay(){
         AsteroidApi.retrofitServicePictureOfDay.getPictureOfTheDay().enqueue(object : retrofit2.Callback<PictureOfDay>{
