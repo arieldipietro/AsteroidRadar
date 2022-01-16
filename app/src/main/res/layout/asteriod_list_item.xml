@@ -5,7 +5,7 @@
 
     <data>
         <variable name="asteroid"
-            type="com.udacity.asteroidradar.Asteroid"/>
+            type="com.udacity.asteroidradar.database.DatabaseAsteroids"/>
         <variable name="clickListener"
             type="com.udacity.asteroidradar.main.AsteroidsListener"/>
     </data>

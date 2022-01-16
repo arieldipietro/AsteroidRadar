@@ -39,7 +39,7 @@ private val retrofitPictureOfDay = Retrofit.Builder()
 interface AsteroidApiService {
 
     @GET("neo/rest/v1/feed")
-    fun getAsteroids(
+    suspend fun getAsteroids(
         @Query("start_date") startDate: String = "2015-09-07",
         @Query("end_date") endDate : String = "2015-09-08",
         @Query("api_key") apiKey: String = API_KEY

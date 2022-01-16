@@ -37,8 +37,8 @@ fun NetworkAsteroidsContainer.asDomainModel(): List<Asteroid>{
 
 
     //converts from data transfer objects to database objects
-fun NetworkAsteroidsContainer.asDatabaseModel(): Array<DatabaseAsteroids>{
-    return asteroids.map{
+fun List<Asteroid>.asDatabaseModel(): Array<DatabaseAsteroids>{
+    return map{
         DatabaseAsteroids(
             id= it.id,
             codename = it.codename,

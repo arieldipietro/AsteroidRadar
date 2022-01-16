@@ -5,11 +5,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.udacity.asteroidradar.Asteroid
+import com.udacity.asteroidradar.database.DatabaseAsteroids
 import com.udacity.asteroidradar.databinding.AsteriodListItemBinding
 
 class AsteroidsAdapter(val clickListener: AsteroidsListener):
-    androidx.recyclerview.widget.ListAdapter<Asteroid, AsteroidsViewHolder>
+    androidx.recyclerview.widget.ListAdapter<DatabaseAsteroids, AsteroidsViewHolder>
         (AsteriodsDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AsteroidsViewHolder {
@@ -27,7 +27,7 @@ class AsteroidsViewHolder private constructor(val binding: AsteriodListItemBindi
     : RecyclerView.ViewHolder(binding.root){
 
 
-    fun bind(item: Asteroid, clickListener: AsteroidsListener) {
+    fun bind(item: DatabaseAsteroids, clickListener: AsteroidsListener) {
         binding.asteroid = item
         binding.executePendingBindings()
         binding.clickListener = clickListener
@@ -43,17 +43,17 @@ class AsteroidsViewHolder private constructor(val binding: AsteriodListItemBindi
 
 }
 
-class AsteriodsDiffCallback : DiffUtil.ItemCallback<Asteroid>(){
-    override fun areItemsTheSame(oldItem: Asteroid, newItem: Asteroid): Boolean {
+class AsteriodsDiffCallback : DiffUtil.ItemCallback<DatabaseAsteroids>(){
+    override fun areItemsTheSame(oldItem: DatabaseAsteroids, newItem: DatabaseAsteroids): Boolean {
         return oldItem.id ==newItem.id
     }
 
-    override fun areContentsTheSame(oldItem: Asteroid, newItem: Asteroid): Boolean {
+    override fun areContentsTheSame(oldItem: DatabaseAsteroids, newItem: DatabaseAsteroids): Boolean {
         return oldItem == newItem
     }
 
 }
 
-class AsteroidsListener (val clickListener: (asteroid: Asteroid) -> Unit){
-    fun onClick(asteroid: Asteroid) = clickListener(asteroid)
+class AsteroidsListener (val clickListener: (asteroid: DatabaseAsteroids) -> Unit){
+    fun onClick(asteroid: DatabaseAsteroids) = clickListener(asteroid)
 }

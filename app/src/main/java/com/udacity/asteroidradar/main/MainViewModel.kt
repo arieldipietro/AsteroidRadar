@@ -11,6 +11,7 @@ import com.udacity.asteroidradar.MainActivity
 import com.udacity.asteroidradar.PictureOfDay
 import com.udacity.asteroidradar.api.parseAsteroidsJsonResult
 import com.udacity.asteroidradar.database.AsteroidsDatabase
+import com.udacity.asteroidradar.database.DatabaseAsteroids
 import com.udacity.asteroidradar.database.getDatabase
 import com.udacity.asteroidradar.network.AsteroidApi
 import com.udacity.asteroidradar.repository.AsteroidsRepository
@@ -25,8 +26,8 @@ class MainViewModel(application : Application) : AndroidViewModel(application) {
     private val database = getDatabase(application)
     private val asteroidsRepository = AsteroidsRepository(database)
 
-    private val _status = MutableLiveData<List<Asteroid>>()
-    val status: LiveData<List<Asteroid>>
+    private val _status = MutableLiveData<List<DatabaseAsteroids>>()
+    val status: LiveData<List<DatabaseAsteroids>>
         get() = _status
 
     private val _pictureOfDay = MutableLiveData<PictureOfDay>()
@@ -37,8 +38,8 @@ class MainViewModel(application : Application) : AndroidViewModel(application) {
     val error: LiveData<String>
         get() = _error
 
-    private val _navigateToDetailFragment = MutableLiveData<Asteroid>()
-    val navigateToDetailFragment : LiveData<Asteroid>
+    private val _navigateToDetailFragment = MutableLiveData<DatabaseAsteroids>()
+    val navigateToDetailFragment : LiveData<DatabaseAsteroids>
         get() = _navigateToDetailFragment
 
     init {
@@ -46,6 +47,7 @@ class MainViewModel(application : Application) : AndroidViewModel(application) {
             asteroidsRepository.refreshAsteroids()
         }
         getPictureOfTheDay()
+        _status.value = database.asteroidDao.getAsteroids()
     }
 
 
@@ -80,7 +82,7 @@ class MainViewModel(application : Application) : AndroidViewModel(application) {
         })
     }
 
-    fun onAsteroidClicked(asteroid: Asteroid){
+    fun onAsteroidClicked(asteroid: DatabaseAsteroids){
         _navigateToDetailFragment.value = asteroid
     }
 
