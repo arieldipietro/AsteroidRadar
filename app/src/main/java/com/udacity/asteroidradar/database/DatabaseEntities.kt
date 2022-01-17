@@ -1,11 +1,14 @@
 package com.udacity.asteroidradar.database
 
+import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.squareup.moshi.Json
 import com.udacity.asteroidradar.Asteroid
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 @Entity(tableName = "asteroids_table")
 data class DatabaseAsteroids constructor(
     @PrimaryKey
@@ -24,7 +27,7 @@ data class DatabaseAsteroids constructor(
     val distanceFromEarth: Double,
     //@ColumnInfo(name = "is_potentially_hazardous")
     val isPotentiallyHazardous: Boolean
-    )
+    ) : Parcelable
 
 //Converts from database objects to domain objects
 fun List<DatabaseAsteroids>.asDomainModel() : List<Asteroid>{

@@ -17,9 +17,13 @@ class DetailFragment : Fragment() {
         val binding = FragmentDetailBinding.inflate(inflater)
         binding.lifecycleOwner = this
 
-        val asteroid = DetailFragmentArgs.fromBundle(requireArguments()).selectedAsteroid
+        val asteroid = DetailFragmentArgs.fromBundle(arguments!!).selectedAsteroid
 
         binding.asteroid = asteroid
+
+       /* val asteroid = DetailFragmentArgs.fromBundle(requireArguments()).selectedAsteroid
+
+        binding.asteroid = asteroid*/
 
         binding.helpButton.setOnClickListener {
             displayAstronomicalUnitExplanationDialog()

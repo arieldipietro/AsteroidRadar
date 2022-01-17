@@ -40,20 +40,6 @@ class MainViewModel(application : Application) : AndroidViewModel(application) {
         getPictureOfTheDay()
     }
 
-
-    /*private fun getAsteroids() {
-        AsteroidApi.retrofitServiceAsteroids.getAsteroids().enqueue(object : retrofit2.Callback<String> {
-            override fun onResponse(call: Call<String>, response: Response<String>) {
-                _status.value =
-                    response.body()?.let { parseAsteroidsJsonResult(JSONObject(it))}
-            }
-
-            override fun onFailure(call: Call<String>, t: Throwable) {
-                _error.value = t.message
-            }
-        })
-    }*/
-
     private fun getPictureOfTheDay(){
         AsteroidApi.retrofitServicePictureOfDay.getPictureOfTheDay().enqueue(object : retrofit2.Callback<PictureOfDay>{
             override fun onResponse(call: Call<PictureOfDay>, response: Response<PictureOfDay>) {
