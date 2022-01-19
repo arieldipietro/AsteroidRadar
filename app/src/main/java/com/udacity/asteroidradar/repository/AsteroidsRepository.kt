@@ -19,7 +19,7 @@ import kotlinx.coroutines.withContext
 import org.json.JSONObject
 
 
-class AsteroidsRepository (private val database : AsteroidsDatabase) {
+class AsteroidsRepository   (private val database : AsteroidsDatabase) {
 
     //loading asteroids from the offline cache
     val asteroids : LiveData<List<Asteroid>> = Transformations.map(database.asteroidDao.getAsteroids()){
@@ -37,6 +37,7 @@ class AsteroidsRepository (private val database : AsteroidsDatabase) {
                 val asteroidsList = parseAsteroidsJsonResult(JSONObject(asteroidsResponse))
 
                 database.asteroidDao.insertAll(*asteroidsList.asDatabaseModel())
+                Log.i("Main Activity", "Fetching succeeded!")
 
             } catch (e: Exception) {
                 Log.i("Main Activity", "Error on getting asteroids: ${e.message}")

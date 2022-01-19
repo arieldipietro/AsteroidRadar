@@ -1,6 +1,7 @@
 package com.udacity.asteroidradar.main
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -40,6 +41,7 @@ class MainFragment : Fragment() {
         viewModel.status.observe(viewLifecycleOwner, Observer{
             it ?.let{
                 adapter.submitList(it)
+                Log.i("Main Activity", "Status changed")
             }
         })
 
@@ -55,6 +57,13 @@ class MainFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        viewModel.updateFilter(
+            when(item.itemId){
+                R.id.show_onwards_menu -> AsteroidsFilter.SHOW_ONWARDS
+                R.id.show_today_menu -> AsteroidsFilter.SHOW_TODAY
+                else -> AsteroidsFilter.SHOW_SAVED
+            }
+        )
         return true
     }
 }
