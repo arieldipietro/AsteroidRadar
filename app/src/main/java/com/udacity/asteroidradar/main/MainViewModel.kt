@@ -24,46 +24,41 @@ class MainViewModel(application : Application) : AndroidViewModel(application) {
     private val asteroidsRepository = AsteroidsRepository(database)
 
     //filter
-    private val asteroidsFilter = MutableLiveData<AsteroidsFilter>()
+    private val asteroidsFilter = MutableLiveData(AsteroidsFilter.SHOW_TODAY)
 
     //Setting up live data for the observer
-    private val _status = MutableLiveData<List<DatabaseAsteroids>>()
-    val status : LiveData<List<DatabaseAsteroids>>
-    get() = _status
+    //private val _status = MutableLiveData<List<DatabaseAsteroids>>()
+    val status : LiveData<List<DatabaseAsteroids>> = Transformations.switchMap(asteroidsFilter){
+        filter ->
+        when(filter){
+            AsteroidsFilter.SHOW_TODAY -> database.asteroidDao.getTodayAsteroids(today)
+            AsteroidsFilter.SHOW_ONWARDS -> database.asteroidDao.getOnwardsAsteroids(today)
+            else -> {
+                database.asteroidDao.getAsteroids()
+            }
+        }
+    }
 
     fun updateFilter(filter: AsteroidsFilter) {
         asteroidsFilter.value =  filter
-        if(filter == AsteroidsFilter.SHOW_TODAY){
-            getTodayAsteroids()
-        }
-        if(filter == AsteroidsFilter.SHOW_ONWARDS){
-            getOnwardsAsteroids()
-        }
-        else{
-            getAllAsteroids()
-        }
     }
 
     //getting filtered Asteroids
     private fun getTodayAsteroids(){
-        _status.value = database.asteroidDao.getTodayAsteroids(today)
+        //_status.value = database.asteroidDao.getTodayAsteroids(today)
         Log.i("MainActivity", "getToday function called")
     }
     private fun getOnwardsAsteroids(){
-        _status.value = database.asteroidDao.getOnwardsAsteroids(today)
+        //_status.value = database.asteroidDao.getOnwardsAsteroids(today)
     }
     private fun getAllAsteroids(){
-        _status.value = database.asteroidDao.getAsteroids()
+        //_status.value = database.asteroidDao.getAsteroids()
     }
 
     //getting picture of the day
     private val _pictureOfDay = MutableLiveData<PictureOfDay>()
     val pictureOfDay : LiveData<PictureOfDay>
         get() = _pictureOfDay
-
-    private val _error = MutableLiveData<String>()
-    val error: LiveData<String>
-        get() = _error
 
     private val _navigateToDetailFragment = MutableLiveData<DatabaseAsteroids>()
     val navigateToDetailFragment : LiveData<DatabaseAsteroids>
@@ -75,8 +70,13 @@ class MainViewModel(application : Application) : AndroidViewModel(application) {
         }
         getAllAsteroids()
         getPictureOfTheDay()
+
+        //checking up dates match current date
         Log.i("MainActivity", "Today's date: $today")
         Log.i("MainActivity", "Seven days onwards: $sevenDaysOnwards")
+
+        //no longer needed, since this is done with the work manager
+        //database.asteroidDao.deletePreviousAsteroids(today)
     }
 
     private fun getPictureOfTheDay(){

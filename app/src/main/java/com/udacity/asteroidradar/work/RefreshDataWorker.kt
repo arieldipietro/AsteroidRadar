@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.udacity.asteroidradar.database.getDatabase
+import com.udacity.asteroidradar.network.today
 import com.udacity.asteroidradar.repository.AsteroidsRepository
 import retrofit2.HttpException
 
@@ -16,6 +17,8 @@ class RefreshDataWorker(appContext: Context, params: WorkerParameters)
 
         return try{
             repository.refreshAsteroids()
+            //deleting old asteroids once a day
+            database.asteroidDao.deletePreviousAsteroids(today)
             Result.success()
         }
         catch(e: HttpException){

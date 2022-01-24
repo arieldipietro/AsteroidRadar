@@ -19,6 +19,7 @@ import java.util.concurrent.TimeUnit
 //using scalars converter factory to get the list of asteroids from the internet
 object Network {
 
+    //I was getting a Timeout exception when caching data from the net
     var okHttpClient = OkHttpClient.Builder()
         .connectTimeout(30, TimeUnit.SECONDS)
         .readTimeout(30, TimeUnit.SECONDS)

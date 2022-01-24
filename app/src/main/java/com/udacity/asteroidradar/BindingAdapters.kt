@@ -1,5 +1,6 @@
 package com.udacity.asteroidradar
 
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.net.toUri
@@ -41,12 +42,16 @@ fun bindImageOfDay(imgView : ImageView, imgUrl: String?){
 
 
 //Adapters for the Detail Fragment
+//ver si el context anda...
 @BindingAdapter("asteroidStatusImage")
 fun bindDetailsStatusImage(imageView: ImageView, isHazardous: Boolean) {
+    val context = imageView.getContext()
     if (isHazardous) {
         imageView.setImageResource(R.drawable.asteroid_hazardous)
+        imageView.contentDescription = context.getString(R.string.potentially_hazardous_asteroid_image)
     } else {
         imageView.setImageResource(R.drawable.asteroid_safe)
+        imageView.contentDescription = context.getString(R.string.not_hazardous_asteroid_image)
     }
 }
 
