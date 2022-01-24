@@ -10,3 +10,4 @@ distributionUrl = https\://services.gradle.org/distributions/gradle-6.1.1-all.zi
 REGARDING THE API:
 Please use your own API Key, since it's highly unsafe (and often breaks the Terms of Service) to include API keys in public repos.
 API KEY can be obtained in https://api.nasa.gov/
+Once an APIkey has been obtained, copy it in the file AsteroidRadar/app/src/main/java/com/udacity/asteroidradar/Constants.kt
